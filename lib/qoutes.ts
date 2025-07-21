@@ -1,0 +1,22 @@
+export const quotes: string[] = [
+    "The only way to do great work is to love what you do. – Steve Jobs",
+    "Success is not the key to happiness. Happiness is the key to success. – Albert Schweitzer",
+    "Don’t watch the clock; do what it does. Keep going. – Sam Levenson",
+    "Opportunities don't happen, you create them. – Chris Grosser",
+    "The future depends on what you do today. – Mahatma Gandhi",
+    "Believe you can and you're halfway there. – Theodore Roosevelt",
+    "It always seems impossible until it’s done. – Nelson Mandela",
+    "Strive not to be a success, but rather to be of value. – Albert Einstein",
+    "The best way to predict the future is to invent it. – Alan Kay",
+    "Dream big and dare to fail. – Norman Vaughan",
+    "Programs must be written for people to read, and only incidentally for machines to execute. – Harold Abelson",
+    "Talk is cheap. Show me the code. – Linus Torvalds",
+    "First, solve the problem. Then, write the code. – John Johnson",
+    "Any fool can write code that a computer can understand. Good programmers write code that humans can understand. – Martin Fowler",
+    "Simplicity is the soul of efficiency. – Austin Freeman",
+    "Code is like humor. When you have to explain it, it’s bad. – Cory House",
+    "Experience is the name everyone gives to their mistakes. – Oscar Wilde",
+    "Before software can be reusable it first has to be usable. – Ralph Johnson",
+    "Make it work, make it right, make it fast. – Kent Beck",
+    "The most disastrous thing that you can ever learn is your first programming language. – Alan Kay"
+];
