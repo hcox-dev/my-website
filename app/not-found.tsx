@@ -2,13 +2,33 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { quotes } from '@/lib/qoutes';
+
+// Fallback quotes in case import fails
+const fallbackQuotes = [
+  "There are only 10 types of people in the world: those who understand binary and those who don't.",
+  "Talk is cheap. Show me the code. – Linus Torvalds",
+  "First, solve the problem. Then, write the code. – John Johnson",
+  "Any fool can write code that a computer can understand. Good programmers write code that humans can understand. – Martin Fowler",
+  "Code is like humor. When you have to explain it, it's bad. – Cory House"
+];
 
 export default function NotFound() {
   const [mounted, setMounted] = useState(false);
+  const [quotes, setQuotes] = useState(fallbackQuotes);
 
   useEffect(() => {
     setMounted(true);
+    
+    // Dynamically import quotes
+    import('@/lib/qoutes')
+      .then((quotesModule) => {
+        if (quotesModule.quotes && quotesModule.quotes.length > 0) {
+          setQuotes(quotesModule.quotes);
+        }
+      })
+      .catch((error) => {
+        console.warn('Could not load quotes, using fallback quotes');
+      });
   }, []);
 
   if (!mounted) {
