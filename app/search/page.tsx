@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { featuredProjects } from '@/data/projects';
 
@@ -46,7 +46,24 @@ interface SearchResult {
   relevanceScore?: number;
 }
 
-export default function SearchPage() {
+// Loading component for Suspense fallback
+function SearchLoading() {
+  return (
+    <section className="search-section fade-in" role="region" aria-labelledby="search-heading">
+      <h1 id="search-heading">Search</h1>
+      <p className="search-intro">
+        Search through my portfolio, projects, skills, and experience to find what you're looking for.
+      </p>
+      <div className="search-loading" role="status" aria-live="polite">
+        <i className="fas fa-spinner fa-spin" aria-hidden="true"></i>
+        <span>Loading search...</span>
+      </div>
+    </section>
+  );
+}
+
+// Main search component that uses useSearchParams
+function SearchContent() {
   const searchParams = useSearchParams();
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchResult[]>([]);
@@ -294,5 +311,14 @@ export default function SearchPage() {
         )}
       </section>
     </>
+  );
+}
+
+// Main export component with Suspense boundary
+export default function SearchPage() {
+  return (
+    <Suspense fallback={<SearchLoading />}>
+      <SearchContent />
+    </Suspense>
   );
 }
