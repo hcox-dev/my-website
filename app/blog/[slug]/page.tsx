@@ -229,7 +229,7 @@ export default function BlogPostPage() {
               All Posts
             </Link>
             <a
-              href={`https://github.com/hcox-dev/my-website/edit/main/content/blog/${slug}.md`}
+              href={`https://github.com/hcox-dev/my-website/edit/master/content/blog/${slug}.md`}
               target="_blank"
               rel="noopener noreferrer"
               className="edit-post"
