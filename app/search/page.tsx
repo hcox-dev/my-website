@@ -34,6 +34,13 @@ const searchableContent = [
     url: '/#contact',
     keywords: ['contact', 'email', 'github', 'linkedin', 'opportunities', 'collaboration']
   },
+  {
+    type: 'resume',
+    title: 'Resume - Hayden Cox',
+    content: 'Professional resume showcasing experience in software development, open source contributions, and cybersecurity education.',
+    url: '/resume',
+    keywords: ['resume', 'cv', 'hayden cox', 'software developer', 'cybersecurity', 'education', 'professional experience']
+  }
   // Projects will be added dynamically
 ];
 
