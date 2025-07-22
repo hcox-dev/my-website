@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { featuredProjects } from '@/data/projects';
+import { BlogPostPreview } from '@/lib/blog/client-utils';
 
 // Sample content that could be searched (you can expand this)
 const searchableContent = [
@@ -70,11 +71,35 @@ function SearchLoading() {
 }
 
 // Main search component that uses useSearchParams
-function SearchContent() {
+function SearchPageContent() {
   const searchParams = useSearchParams();
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchResult[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
+  const [blogPosts, setBlogPosts] = useState<BlogPostPreview[]>([]);
+  const [isLoadingBlog, setIsLoadingBlog] = useState(true);
+
+  // Load blog posts on mount
+  useEffect(() => {
+    async function fetchBlogData() {
+      try {
+        const response = await fetch('/api/v1/blog');
+        const data = await response.json();
+        
+        if (data.success) {
+          setBlogPosts(data.posts);
+        } else {
+          console.warn('Error loading blog posts for search:', data.error);
+        }
+      } catch (error) {
+        console.warn('Error fetching blog posts for search:', error);
+      } finally {
+        setIsLoadingBlog(false);
+      }
+    }
+
+    fetchBlogData();
+  }, []);
 
   // Get query from URL parameters
   useEffect(() => {
@@ -84,7 +109,7 @@ function SearchContent() {
     }
   }, [searchParams]);
 
-  // All searchable content including projects
+  // All searchable content including projects and blog posts
   const allContent = useMemo(() => {
     const projectContent = featuredProjects.map(project => ({
       type: 'project',
@@ -97,9 +122,23 @@ function SearchContent() {
         'project', 'github', 'code', 'development'
       ]
     }));
+
+    // Add blog posts to searchable content
+    const blogContent: SearchResult[] = blogPosts.map((post: BlogPostPreview) => ({
+      type: 'blog',
+      title: post.frontmatter.title,
+      content: post.frontmatter.excerpt,
+      url: `/blog/${post.slug}`,
+      keywords: [
+        ...(post.frontmatter.tags || []).map((tag: string) => tag.toLowerCase()),
+        post.frontmatter.title.toLowerCase(),
+        ...post.frontmatter.excerpt.toLowerCase().split(' '),
+        'blog', 'article', 'post', 'technical'
+      ]
+    }));
     
-    return [...searchableContent, ...projectContent];
-  }, []);
+    return [...searchableContent, ...projectContent, ...blogContent];
+  }, [blogPosts]);
 
   // Search function
   const performSearch = (searchQuery: string): SearchResult[] => {
@@ -143,18 +182,18 @@ function SearchContent() {
   // Handle search
   useEffect(() => {
     if (query) {
-      setIsLoading(true);
+      setIsSearching(true);
       // Simulate search delay for better UX
       const searchTimeout = setTimeout(() => {
         const searchResults = performSearch(query);
         setResults(searchResults);
-        setIsLoading(false);
+        setIsSearching(false);
       }, 300);
 
       return () => clearTimeout(searchTimeout);
     } else {
       setResults([]);
-      setIsLoading(false);
+      setIsSearching(false);
     }
   }, [query, allContent]);
 
@@ -226,14 +265,14 @@ function SearchContent() {
           </div>
         </form>
 
-        {isLoading && (
+        {(isSearching || isLoadingBlog) && (
           <div className="search-loading" role="status" aria-live="polite">
             <i className="fas fa-spinner fa-spin" aria-hidden="true"></i>
-            <span>Searching...</span>
+            <span>{isLoadingBlog ? 'Loading...' : 'Searching...'}</span>
           </div>
         )}
 
-        {query && !isLoading && (
+        {query && !isSearching && !isLoadingBlog && (
           <div className="search-results" role="region" aria-labelledby="results-heading">
             <h2 id="results-heading" className="results-heading">
               {results.length > 0 
@@ -284,7 +323,7 @@ function SearchContent() {
               </div>
             )}
 
-            {results.length === 0 && query && !isLoading && (
+            {results.length === 0 && query && !isSearching && !isLoadingBlog && (
               <div className="no-results">
                 <i className="fas fa-search" aria-hidden="true"></i>
                 <h3>No results found</h3>
@@ -301,7 +340,7 @@ function SearchContent() {
           </div>
         )}
 
-        {!query && !isLoading && (
+        {!query && !isLoadingBlog && (
           <div className="search-help">
             <h3>Popular searches</h3>
             <div className="search-tags">
@@ -325,7 +364,7 @@ function SearchContent() {
 export default function SearchPage() {
   return (
     <Suspense fallback={<SearchLoading />}>
-      <SearchContent />
+      <SearchPageContent />
     </Suspense>
   );
 }

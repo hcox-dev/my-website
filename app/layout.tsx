@@ -230,6 +230,7 @@ export default function RootLayout({
           <nav role="navigation" aria-label="Main navigation">
             <a href="/#about" aria-label="About Hayden Cox section">About</a>
             <a href="/#projects" aria-label="Software development projects">Projects</a>
+            <a href="/blog" aria-label="Technical blog and articles">Blog</a>
             <a href="/resume" aria-label="Professional resume">Resume</a>
             <a href="/search" aria-label="Search portfolio content">Search</a>
           </nav>
