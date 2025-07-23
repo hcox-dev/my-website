@@ -234,6 +234,12 @@ export default function RootLayout({
             <a href="/resume" aria-label="Professional resume">Resume</a>
             <a href="/search" aria-label="Search portfolio content">Search</a>
           </nav>
+
+          <div className="spotify-profile">
+            <a href="https://spotify-github-profile.kittinanx.com/api/view?uid=31ztkrtzz4grziugqpjtxna74ija&redirect=true" target="_blank" rel="noopener noreferrer">
+              <img src="https://spotify-github-profile.kittinanx.com/api/view?uid=31ztkrtzz4grziugqpjtxna74ija&cover_image=true&theme=novatorem&show_offline=true&background_color=121212&interchange=true&bar_color=53b14f&bar_color_cover=true" alt="Spotify GitHub Profile" />
+            </a>
+          </div>
         </div>
         <VimAlert />
         <main className="container" role="main">

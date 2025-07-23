@@ -2367,3 +2367,14 @@ canvas {
     font-size: 0.8rem;
   }
 }
+
+.spotify-profile {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.spotify-profile img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+}
